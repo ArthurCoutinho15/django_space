@@ -1,3 +1,4 @@
+from typing import Any
 from django import forms
 
 
@@ -36,7 +37,7 @@ class CadastroForms(forms.Form):
                 'class': 'form-control',
                 'placeholder': 'Ex.: João Silva'
             }
-        )
+        ),
     )
     email = forms.EmailField(
         label='Email',
@@ -47,7 +48,7 @@ class CadastroForms(forms.Form):
                 'class': 'form-control',
                 'placeholder': 'Ex.: joaosilva@xpto.com'
             }
-        )
+        ),
     )
     senha_1 = forms.CharField(
         label='Senha',
@@ -58,7 +59,7 @@ class CadastroForms(forms.Form):
                 'class': 'form-control',
                 'placeholder': 'Digite sua senha'
             }
-        )
+        ),
     )
     senha_2 = forms.CharField(
         label='Confirmação de Senha',
@@ -69,5 +70,16 @@ class CadastroForms(forms.Form):
                 'class': 'form-control',
                 'placeholder': 'Confirme sua senha'
             }
-        )
+        ),
     )
+
+    def clean_nome_cadastro(self):
+        nome = self.cleaned_data.get('nome_cadastro')
+
+        if nome:
+            nome = nome.strip()
+            if ' ' in nome:
+                raise forms.ValidationError(
+                    'Espaços não são permitidos nesse campo')
+            else:
+                return nome
